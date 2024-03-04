@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kain LaSalle | Admin</title>
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+    <link rel="icon" href="images/favicon.png" type="image/gif" />
+    <link
+      rel="stylesheet"
+      href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header>
+      <nav class="navbar navbar-light bg-light">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="/">
+            <img src="images/logo.png" alt="" width="125px" height="100px" />
+          </a>
+          <ul class="d-flex navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="/logout">Logout</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </header>
+    <main class="container py-3">
+      <h1>Welcome back, <span id="username"></span>.</h1>
+      <!-- Sales Table -->
+      <!-- <div class="mb-4">
+        <h2>Sales</h2>
+        <table class="table table-bordered" id="salesTable">
+          <thead class="thead-dark">
+            <tr>
+              <th>Date</th>
+              <th>Product</th>
+              <th>Quantity Sold</th>
+            </tr>
+          </thead>
+          <tbody>
+            Content will be loaded dynamically using JavaScript
+          </tbody>
+        </table>
+      </div> -->
+
+      <!-- Stock Table -->
+      <div>
+        <h2>Stock</h2>
+        <table class="table table-bordered">
+          <thead class="thead-dark">
+            <tr>
+              <th>Product</th>
+              <th>Price</th>
+              <th>Current Stock</th>
+            </tr>
+          </thead>
+          <tbody id="stockTableBody">
+            <!-- Content will be loaded dynamically using JavaScript -->
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </body>
+
+  <script>
+    // Fetch stocks
+    document.addEventListener("DOMContentLoaded", function () {
+      fetch("/admin/products")
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            document.getElementById("username").innerHTML =
+              data.existingUser.userName;
+
+            let tr = "";
+            data.products.forEach((product) => {
+              tr += `
+                <tr>
+                  <td>${product.name}</td>
+                  <td>${product.price}</td>
+                  <td>${product.stock}</td>
+                </tr>
+              `;
+            });
+
+            document.getElementById("stockTableBody").innerHTML = tr;
+          }
+        })
+        .catch((error) =>
+          console.error("Error fetching user products:", error)
+        );
+    });
+  </script>
+</html>

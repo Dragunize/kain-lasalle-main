@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kain LaSalle - Admin Login</title>
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+    <link rel="icon" href="images/fevicon.png" type="image/gif" />
+    <link rel="stylesheet" href="css/jquery.mCustomScrollbar.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/owl-carousel/1.3.3/owl.carousel.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <main class="d-flex align-items-center justify-content-center text-center">
+      <div class="login">
+        <form id="adminLoginForm">
+          <h1>Admin Login</h1>
+          <div class="input-box">
+            <input
+              type="text"
+              name="username"
+              placeholder="Username"
+              required
+            />
+          </div>
+
+          <div class="input-box">
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              required
+            />
+          </div>
+
+          <button type="submit" id="login" class="btnLogin">Login</button>
+        </form>
+      </div>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/sha256.js"></script>
+    <script type="text/javascript">
+      document
+        .getElementById("adminLoginForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+
+          const formData = new FormData(event.target);
+          const username = formData.get("username");
+          const password = formData.get("password");
+
+          fetch("/adlogin", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ username, password }),
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error(response.statusText);
+              }
+              return response.json();
+            })
+            .then((data) => {
+              if (data.success) {
+                // Display "Logging in..." alert immediately
+                alert("Logging in...");
+
+                // Redirect after 0.5 seconds
+                setTimeout(function () {
+                  window.location.href = "/admin";
+                }, 50);
+              } else {
+                alert(data.message);
+              }
+            })
+            .catch((error) => {
+              console.error("Login failed:", error);
+              alert("Error during login");
+            });
+        });
+    </script>
+  </body>
+</html>
